@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tienda Boutique — Joyas, Accesorios y Cosméticos</title>
+  <!--
+    Página web estática de ejemplo para una tienda virtual de joyas, accesorios y cosméticos.
+    Esta sola página contiene HTML, CSS y JavaScript mínimo para demostrar:
+      - Estructura semántica (header, nav, main, footer)
+      - Barra de navegación responsiva
+      - Grid de productos con tarjetas
+      - Filtro por categoría y búsqueda
+      - Carrito simple (almacenado en memoria - no persistente)
+    Guarda este archivo como `index.html` y ábrelo en tu navegador.
+  -->
+  <style>
+    /* Reset ligero */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; line-height:1.4; color:#111; background: #faf8f6}
+
+    /* Encabezado / navbar */
+    header{background:linear-gradient(90deg,#f8efe8,#fff);border-bottom:1px solid #eee}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#d59,#fdd);display:grid;place-items:center;font-weight:700;color:white}
+    nav ul{list-style:none;display:flex;gap:12px;align-items:center}
+    nav a{color:#333;text-decoration:none;padding:8px 10px;border-radius:8px}
+    nav a:hover{background:#fff2ea}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:center;padding:28px 0}
+    .hero h1{font-size:28px;margin-bottom:8px}
+    .hero p{color:#5b5b5b}
+    .hero-cta{display:flex;gap:12px;margin-top:18px}
+    .btn{background:#d9534f;color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid #ddd;color:#333}
+
+    /* Controles: búsqueda y filtros */
+    .controls{display:flex;gap:12px;align-items:center;margin:18px 0}
+    .search{flex:1;display:flex}
+    .search input{flex:1;padding:10px 12px;border-radius:10px 0 0 10px;border:1px solid #ddd}
+    .search button{padding:10px 12px;border-radius:0 10px 10px 0;border:1px solid #ddd;border-left:0;background:#fff}
+    .select{padding:10px;border-radius:10px;border:1px solid #ddd}
+
+    /* Grid de productos */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+    .card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(16,16,16,0.06);display:flex;flex-direction:column}
+    .card .thumb{aspect-ratio:1/1.05;display:grid;place-items:center;background:linear-gradient(180deg,#fff,#fff);}
+    .thumb img{max-width:88%;max-height:88%;object-fit:contain}
+    .card .body{padding:12px;display:flex;flex-direction:column;gap:8px}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .price{font-weight:700}
+    .add{background:#222;color:white;border:none;padding:8px;border-radius:8px;cursor:pointer}
+    .badge{font-size:12px;background:#fff1e6;border-radius:999px;padding:6px 8px;border:1px solid #ffe3d6}
+
+    /* Carrito lateral */
+    .cart-toggle{position:relative}
+    .cart-count{position:absolute;top:-8px;right:-8px;background:#d9534f;color:white;border-radius:999px;padding:4px 7px;font-size:12px}
+    .cart-panel{position:fixed;right:18px;top:70px;width:320px;background:white;border-radius:12px;box-shadow:0 12px 34px rgba(16,16,16,0.12);padding:14px;z-index:60;display:none}
+    .cart-panel.open{display:block}
+    .cart-panel h3{margin-bottom:12px}
+    .cart-item{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+    .cart-item img{width:48px;height:48px;border-radius:8px;object-fit:cover}
+    .cart-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+
+    /* Footer */
+    footer{border-top:1px solid #eee;padding:18px 0;margin-top:18px;color:#666}
+
+    /* Responsive */
+    @media(max-width:880px){
+      .hero{grid-template-columns:1fr}
+      .topbar{padding:12px 0}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container topbar">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div style="font-weight:700">Boutique Bella</div>
+          <div style="font-size:12px;color:#7a7a7a">Joyas · Accesorios · Cosméticos</div>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#productos">Productos</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li class="cart-toggle">
+            <button id="openCart" class="btn secondary">Carrito</button>
+            <span id="cartCount" class="cart-count" style="display:none">0</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title">Encuentra tu brillo — Joyas, accesorios y cosméticos seleccionados</h1>
+        <p>Curamos piezas elegantes y cosmética de calidad. Envíos rápidos y pagos seguros.</p>
+        <div class="hero-cta">
+          <button class="btn" onclick="scrollToProducts()">Ver productos</button>
+          <button class="btn secondary" onclick="openContact()">Contáctanos</button>
+        </div>
+
+        <!-- Controles de búsqueda y filtro -->
+        <div class="controls" style="margin-top:22px">
+          <div class="search">
+            <input id="searchInput" type="search" placeholder="Buscar producto, marca o referencia..." aria-label="Buscar productos">
+            <button onclick="applyFilters()">🔍</button>
+          </div>
+          <select id="categoryFilter" class="select" onchange="applyFilters()">
+            <option value="all">Todas las categorías</option>
+            <option value="joyeria">Joyería</option>
+            <option value="accesorios">Accesorios</option>
+            <option value="cosmeticos">Cosméticos</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Destacado lateral (puede usarse para promociones) -->
+      <aside style="background:#fff;border-radius:12px;padding:18px;box-shadow:0 8px 20px rgba(16,16,16,0.04)">
+        <h3 style="margin-bottom:10px">Oferta del mes</h3>
+        <div style="font-size:14px;color:#5b5b5b">Hasta 25% de descuento en sets seleccionados. Envío gratis desde $40.</div>
+        <div style="margin-top:12px"><span class="badge">Envío rápido</span></div>
+      </aside>
+    </section>
+
+    <!-- LISTA DE PRODUCTOS -->
+    <section id="productos">
+      <h2 style="margin:18px 0">Productos</h2>
+      <div id="productGrid" class="grid">
+        <!-- Las tarjetas se generan por JavaScript a partir del arreglo de productos -->
+      </div>
+    </section>
+  </main>
+
+  <!-- PANEL CARRITO -->
+  <div id="cartPanel" class="cart-panel" aria-hidden="true">
+    <h3>Tu carrito</h3>
+    <div id="cartItems"></div>
+    <div class="cart-footer">
+      <strong id="cartTotal">Total: $0.00</strong>
+      <button class="btn" onclick="checkout()">Pagar</button>
+    </div>
+  </div>
+
+  <footer id="contacto">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <strong>Boutique Bella</strong>
+        <div style="font-size:13px">Calle Falsa 123 · Quito · Ecuador</div>
+      </div>
+      <div style="font-size:13px">Síguenos: Instagram · Facebook · TikTok</div>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Datos de ejemplo: productos ----------
+    // Cada producto tiene: id, nombre, categoria, precio, imagen (inline SVG o base64), descripcion
+    const products = [
+      {id:1, nombre:'Collar Perla Clásico', categoria:'joyeria', precio:45.00, img:svgPlaceholder('Collar'), desc:'Collar con perla sintética y cadena bañada en oro.'},
+      {id:2, nombre:'Anillo Brillo', categoria:'joyeria', precio:32.50, img:svgPlaceholder('Anillo'), desc:'Anillo con cristal facetado, ideal para regalo.'},
+      {id:3, nombre:'Aretes Minimal', categoria:'accesorios', precio:18.00, img:svgPlaceholder('Aretes'), desc:'Aretes pequeños para uso diario.'},
+      {id:4, nombre:'Bolso Clutch', categoria:'accesorios', precio:55.00, img:svgPlaceholder('Bolso'), desc:'Bolso elegante para eventos y salidas.'},
+      {id:5, nombre:'Labial Mate', categoria:'cosmeticos', precio:12.00, img:svgPlaceholder('Labial'), desc:'Labial de larga duración, acabado mate.'},
+      {id:6, nombre:'Paleta Ojos', categoria:'cosmeticos', precio:28.00, img:svgPlaceholder('Paleta'), desc:'Paleta de sombras neutrales para todo look.'}
+    ];
+
+    // Carrito en memoria: {productId: cantidad}
+    const cart = {};
+
+    // ---------- Helpers ----------
+    function svgPlaceholder(text){
+      // Genera una data URL con SVG simple para usar como imagen de producto.
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23f7f3f2'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='42' fill='%23333' font-family='Arial'>${escapeHtml(text)}</text></svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+    function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    // ---------- Renderizado de productos ----------
+    function renderProducts(list){
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      list.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb"><img src="${p.img}" alt="${p.nombre}"></div>
+          <div class="body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:700">${p.nombre}</div>
+              <div class="price">$${p.precio.toFixed(2)}</div>
+            </div>
+            <div style="color:#666;font-size:13px">${p.desc}</div>
+            <div class="meta" style="margin-top:8px">
+              <div class="badge">${capitalize(p.categoria)}</div>
+              <div>
+                <button class="add" onclick="addToCart(${p.id})">Agregar</button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+    // ---------- Filtros y búsqueda ----------
+    function applyFilters(){
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      const filtered = products.filter(p => {
+        const matchCat = (cat === 'all') || p.categoria === cat;
+        const matchQ = !q || p.nombre.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+      renderProducts(filtered);
+    }
+
+    // ---------- Carrito (UI mínima) ----------
+    function addToCart(id){
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+    }
+
+    function removeFromCart(id){
+      if(!cart[id]) return;
+      cart[id]--;
+      if(cart[id] <= 0) delete cart[id];
+      updateCartUI();
+    }
+
+    function updateCartUI(){
+      const itemsEl = document.getElementById('cartItems');
+      itemsEl.innerHTML = '';
+      let total = 0; let count = 0;
+      Object.keys(cart).forEach(key => {
+        const id = Number(key);
+        const qty = cart[id];
+        const p = products.find(x=>x.id===id);
+        if(!p) return;
+        total += p.precio * qty; count += qty;
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.nombre}">
+          <div style="flex:1">
+            <div style="font-weight:700">${p.nombre}</div>
+            <div style="font-size:13px;color:#666">${qty} × $${p.precio.toFixed(2)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn" onclick="addToCart(${p.id})">+</button>
+            <button class="btn secondary" onclick="removeFromCart(${p.id})">-</button>
+          </div>
+        `;
+        itemsEl.appendChild(div);
+      });
+      document.getElementById('cartTotal').textContent = `Total: $${total.toFixed(2)}`;
+      const cartCount = document.getElementById('cartCount');
+      if(count>0){cartCount.style.display='inline-block';cartCount.textContent = count;} else {cartCount.style.display='none'}
+    }
+
+    // ---------- Panel carrito: abrir/cerrar ----------
+    const cartPanel = document.getElementById('cartPanel');
+    document.getElementById('openCart').addEventListener('click', ()=>{
+      cartPanel.classList.toggle('open');
+      const open = cartPanel.classList.contains('open');
+      cartPanel.setAttribute('aria-hidden', !open);
+    });
+
+    // ---------- Checkout (simulado) ----------
+    function checkout(){
+      if(Object.keys(cart).length===0){alert('Tu carrito está vacío. Agrega productos para continuar.');return}
+      // Aquí normalmente conectarías con un backend o servicio de pago.
+      alert('Proceso de pago simulado. Total: ' + document.getElementById('cartTotal').textContent);
+      // vaciar carrito
+      for(const k of Object.keys(cart)) delete cart[k];
+      updateCartUI();
+      cartPanel.classList.remove('open');
+    }
+
+    // ---------- Pequeñas utilidades de navegación ----------
+    function scrollToProducts(){document.getElementById('productos').scrollIntoView({behavior:'smooth'})}
+    function openContact(){document.getElementById('contacto').scrollIntoView({behavior:'smooth'})}
+
+    // ---------- Inicialización ----------
+    renderProducts(products);
+    // Si quieres prefiltrar por query string, podrías leer location.search aquí.
+  </script>
+</body>
+</html>
