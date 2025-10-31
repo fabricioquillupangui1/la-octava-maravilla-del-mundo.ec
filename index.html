@@ -84,8 +84,8 @@ button:hover{background:#0056b3;}
 
 <!-- WhatsApp botones -->
 <div class="whatsapp-btns">
-  <a href="https://wa.me/TU_NUMERO_1" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp 1"></a>
-  <a href="https://wa.me/TU_NUMERO_2" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp 2"></a>
+  <a href="https://wa.me/593987872572" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp 1"></a>
+  <a href="https://wa.me/593969271389" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp 2"></a>
 </div>
 
 <footer>
@@ -97,16 +97,19 @@ const scriptURL = "https://script.google.com/macros/s/AKfycby_R0ZYeP-iMLQhmgLTcI
 
 // Productos
 const products = [
-  {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:'https://i.postimg.cc/pd9ckR9K/p1.png'},
-  {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:''},
-  {id:3,nombre:'Aretes Largos',categoria:'joyeria',precio:22.00,img:''},
-  {id:4,nombre:'Anillos',categoria:'joyeria',precio:30.00,img:''},
-  {id:5,nombre:'Juegos (Cadena, Dije, Aretes)',categoria:'joyeria',precio:40.00,img:''},
-  {id:6,nombre:'Pulseras',categoria:'accesorios',precio:18.00,img:''},
-  {id:7,nombre:'Conjuntos Personalizados',categoria:'joyeria',precio:35.00,img:''},
-  {id:8,nombre:'Aretes Pequeños',categoria:'joyeria',precio:15.00,img:''},
+  {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:9.00,img:'https://i.postimg.cc/pd9ckR9K/p1.png'},
+  {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:3.50,img:'https://i.postimg.cc/6q3TDjCM/Whats-App-Image-2025-10-30-at-15-35-48.jpg'},
+  {id:3,nombre:'Aretes Largos',categoria:'joyeria',precio:6.00,img:'https://i.postimg.cc/Y2m3PdC7/Whats-App-Image-2025-10-30-at-15-35-46.jpg'},
+  {id:4,nombre:'Anillos',categoria:'joyeria',precio:6.00,img:'https://i.postimg.cc/SRzzt16T/Whats-App-Image-2025-10-30-at-15-35-47.jpg'},
+  {id:5,nombre:'Juegos (Cadena, Dije, Aretes)',categoria:'joyeria',precio:9.00,img:'https://i.postimg.cc/yNZmGd7d/Whats-App-Image-2025-10-30-at-15-35-45.jpg'},
+  {id:6,nombre:'Pulseras',categoria:'accesorios',precio:5.00,img:'https://i.postimg.cc/htCZnfFM/Whats-App-Image-2025-10-30-at-15-35-46-2.jpg'},
+  {id:7,nombre:'Conjuntos Personalizados',categoria:'joyeria',precio:9.00,img:'https://i.postimg.cc/26LK2mKx/Whats-App-Image-2025-10-30-at-15-35-46-1.jpg'},
+  {id:8,nombre:'Aretes Pequeños',categoria:'joyeria',precio:2.50,img:'https://i.postimg.cc/0yx1j6Bk/Whats-App-Image-2025-10-30-at-15-35-43-1.jpg'},
   {id:9,nombre:'Cadenas Cubanas',categoria:'joyeria',precio:20.00,img:'https://i.postimg.cc/SN4HjxL5/Whats-App-Image-2025-10-30-at-15-35-43.jpg'},
-  {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:''}
+  {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:30.50,img:'https://siemprelinda.com.ec/cdn/shop/products/fa_1653603234848_gx4lgv5wc7hasbe.jpg?v=1676355229'}
+  {id:11,nombre:'Perfume Mujer Di que si',categoria:'perfumes',precio:32.00,img:'https://i.ebayimg.com/images/g/yvYAAOSwFVVf~86m/s-l1200.jpg'},
+  {id:12,nombre:'Conjuntos para dama',categoria:'accesorios',precio:6.00,img:'https://i.postimg.cc/X79XtC57/Whats-App-Image-2025-10-30-at-15-35-44.jpg'},
+  {id:13,nombre:'Tobilleras',categoria:'accesorios',precio:4.00,img:'https://i.postimg.cc/J0VMQpP5/Whats-App-Image-2025-10-30-at-15-35-48-1.jpg'}, 
 ];
 
 const cart = {};
@@ -227,7 +230,7 @@ function showPromo(){
   const popup=document.getElementById('promoPopup');
   popup.innerText=promos[promoIndex];
   popup.style.display='block';
-  setTimeout(()=>{popup.style.display='none';},5000);
+  setTimeout(()=>{popup.style.display='none';},10000);
   promoIndex=(promoIndex+1)%promos.length;
 }
 setInterval(showPromo,10000);
@@ -238,4 +241,5 @@ renderProducts(products);
 
 </body>
 </html>
+
 
