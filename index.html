@@ -1,110 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Registro de Pedido</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>La Octava Maravilla del Mundo — Joyas, Accesorios y Perfumes</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f3f4f6;
-    }
-    form {
-      background: white;
-      padding: 25px 40px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-      width: 360px;
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .msg {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: bold;
-      color: green;
-    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:'Inter',system-ui,sans-serif;background:#eaf3ff;color:#111;line-height:1.4}
+    header{background:#fff;border-bottom:1px solid #ddd;}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:60px;height:60px;border-radius:8px;background:#f0f0f0;display:grid;place-items:center;overflow:hidden;}
+    .logo img{width:100%;height:100%;object-fit:cover}
+    .brand-name{font-weight:700;font-size:18px}
+    .subtitle{font-size:12px;color:#7a7a7a}
+    nav ul{list-style:none;display:flex;gap:14px;align-items:center}
+    nav a{text-decoration:none;color:#333;padding:8px 10px;border-radius:8px}
+    nav a:hover{background:#e6efff}
+    .cart-toggle{position:relative}
+    .cart-count{position:absolute;top:-8px;right:-8px;background:#d9534f;color:white;border-radius:50%;padding:4px 7px;font-size:12px}
+    .cart-icon{width:20px;height:20px;vertical-align:middle;margin-right:6px}
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:center;padding:28px 0}
+    .hero h1{font-size:28px;margin-bottom:8px}
+    .hero p{color:#555}
+    .btn{background:#0074D9;color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+    .btn.secondary{background:#fff;border:1px solid #ccc;color:#333}
+    .controls{display:flex;gap:12px;margin-top:20px}
+    .search{flex:1;display:flex}
+    .search input{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px 0 0 10px}
+    .search button{padding:10px;border:1px solid #ccc;border-left:0;border-radius:0 10px 10px 0;background:#fff}
+    #productos{margin-top:30px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .card{background:white;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);overflow:hidden}
+    .thumb{aspect-ratio:1/1;display:grid;place-items:center;background:#f9f9f9}
+    .thumb img{max-width:90%;max-height:90%;object-fit:contain}
+    .body{padding:12px}
+    .price{font-weight:700}
+    .add{background:#0074D9;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;margin-top:8px}
+    #pedidoForm{background:white;padding:25px 30px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.05);margin-top:40px}
+    #pedidoForm h2{margin-bottom:12px;text-align:center;color:#0074D9}
+    #pedidoForm input,#pedidoForm textarea{width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px}
+    #pedidoForm button{width:100%;padding:10px;background:#007bff;color:white;border:none;border-radius:8px;cursor:pointer;font-size:16px}
+    footer{margin-top:40px;padding:20px 0;background:#fff;border-top:1px solid #ddd;text-align:center;font-size:14px;color:#666}
   </style>
 </head>
 <body>
 
-  <form id="formPedido">
-    <h2>Registrar Pedido</h2>
+<header>
+  <div class="container topbar">
+    <div class="brand">
+      <div class="logo">
+        <img src="https://i.postimg.cc/c4CMMSL2/Whats-App-Image-2025-10-30-at-15-35-49.jpg" alt="Logo">
+      </div>
+      <div>
+        <div class="brand-name">La Octava Maravilla del Mundo</div>
+        <div class="subtitle">Joyas · Accesorios · Perfumes</div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#pedidoForm">Registrar Pedido</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-    <label>Nombres:</label>
-    <input type="text" name="nombres" required>
+<main class="container">
 
-    <label>Correo:</label>
-    <input type="email" name="correo" required>
+  <section class="hero">
+    <div>
+      <h1>Redefine tu belleza con joyas y perfumes exclusivos</h1>
+      <p>Descubre nuestras colecciones únicas y celebra tu elegancia.</p>
+      <div class="controls">
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="Buscar producto..." />
+          <button onclick="applyFilters()">🔍</button>
+        </div>
+        <select id="categoryFilter" onchange="applyFilters()">
+          <option value="all">Todas las categorías</option>
+          <option value="joyeria">Joyería</option>
+          <option value="perfumes">Perfumes</option>
+          <option value="accesorios">Accesorios</option>
+        </select>
+      </div>
+    </div>
+  </section>
 
-    <label>Teléfono:</label>
-    <input type="text" name="telefono" required>
+  <section id="productos">
+    <h2 style="margin-bottom:12px;color:#0074D9">Catálogo de Productos</h2>
+    <div id="productGrid" class="grid"></div>
+  </section>
 
-    <label>Pedido:</label>
-    <textarea name="pedido" rows="4" required></textarea>
+  <!-- FORMULARIO UNIFICADO PARA PEDIDOS -->
+  <section id="pedidoForm">
+    <h2>REGISTRA TU PEDIDO</h2>
+    <form id="formPedido">
+      <input type="text" name="nombres" placeholder="Nombre y Apellido" required>
+      <input type="email" name="correo" placeholder="Correo Electrónico" required>
+      <input type="tel" name="telefono" placeholder="Teléfono" required>
+      <textarea name="pedido" rows="4" placeholder="Describe tu pedido aquí..." required></textarea>
+      <button type="submit">Enviar Pedido</button>
+      <div class="msg" id="msg"></div>
+    </form>
+    <p style="font-size:12px;text-align:center;color:#777">Tu pedido será registrado automáticamente en nuestra hoja de control.</p>
+  </section>
 
-    <button type="submit">Enviar</button>
-    <div class="msg" id="msg"></div>
-  </form>
+</main>
 
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwgtql-tElo73RQ9U1kO5S9b8tIvy5UqOT9_voqWuoxo9adYJiRTq0_qq8zwgHMXzFtRA/exec";
+<footer id="contacto">
+  <div>© 2025 La Octava Maravilla del Mundo — Todos los derechos reservados.</div>
+</footer>
 
-    document.getElementById('formPedido').addEventListener('submit', e => {
-      e.preventDefault();
+<script>
+// --- CATALOGO DE PRODUCTOS ---
+const products = [
+  {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:'',desc:'Producto estrella.'},
+  {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:'',desc:'Producto interrogante.'},
+  {id:3,nombre:'Aretes Largos',categoria:'joyeria',precio:22.00,img:'',desc:'Producto interrogante.'},
+  {id:4,nombre:'Anillos',categoria:'joyeria',precio:30.00,img:'',desc:'Producto vaca.'},
+  {id:5,nombre:'Juegos (Cadena, Dije, Aretes)',categoria:'joyeria',precio:40.00,img:'',desc:'Producto vaca.'},
+  {id:6,nombre:'Pulseras',categoria:'accesorios',precio:18.00,img:'',desc:'Producto perro.'},
+  {id:7,nombre:'Conjuntos Personalizados',categoria:'joyeria',precio:35.00,img:'',desc:'Personaliza tu estilo.'},
+  {id:8,nombre:'Aretes Pequeños',categoria:'joyeria',precio:15.00,img:'',desc:'Perfectos para uso diario.'},
+  {id:9,nombre:'Cadenas Cubanas',categoria:'joyeria',precio:20.00,img:'https://i.postimg.cc/SN4HjxL5/Whats-App-Image-2025-10-30-at-15-35-43.jpg',desc:'Estilo moderno.'},
+  {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:'',desc:'Fragancia elegante.'}
+];
 
-      const form = e.target;
-      const formData = new FormData(form);
+function renderProducts(list){
+  const grid=document.getElementById('productGrid');
+  grid.innerHTML='';
+  list.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`
+      <div class="thumb"><img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
+      <div class="body">
+        <div style="font-weight:700">${p.nombre}</div>
+        <div class="price">$${p.precio.toFixed(2)}</div>
+        <div style="font-size:13px;color:#666">${p.desc}</div>
+        <button class="add" onclick="addToCart(${p.id})">Agregar al carrito</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
 
-      fetch(scriptURL, {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(result => {
-        document.getElementById('msg').innerText = "✅ Pedido enviado correctamente";
-        form.reset();
-      })
-      .catch(error => {
-        document.getElementById('msg').innerText = "❌ Error al enviar el pedido";
-        console.error('Error:', error);
-      });
+function applyFilters(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const cat=document.getElementById('categoryFilter').value;
+  const filtered=products.filter(p=>{
+    const matchCat=(cat==='all'||p.categoria===cat);
+    const matchQ=!q||p.nombre.toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  renderProducts(filtered);
+}
+
+const cart={};
+function addToCart(id){
+  cart[id]=(cart[id]||0)+1;
+  updateCartCount();
+  console.log("Producto agregado al carrito:", id);
+}
+function updateCartCount(){
+  const count=Object.values(cart).reduce((a,b)=>a+b,0);
+  const el=document.getElementById('cartCount');
+  if(count>0){el.textContent=count;el.style.display='inline-block'}else el.style.display='none';
+}
+
+// --- ENVIO DE PEDIDO A GOOGLE SHEETS ---
+const scriptURL = "https://script.google.com/macros/s/AKfycbwgtql-tElo73RQ9U1kO5S9b8tIvy5UqOT9_voqWuoxo9adYJiRTq0_qq8zwgHMXzFtRA/exec";
+
+document.getElementById('formPedido').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+
+  fetch(scriptURL, {method:'POST', body:formData})
+    .then(response=>response.text())
+    .then(result=>{
+      document.getElementById('msg').innerText="✅ Pedido enviado correctamente";
+      form.reset();
+    })
+    .catch(error=>{
+      document.getElementById('msg').innerText="❌ Error al enviar el pedido";
+      console.error('Error:', error);
     });
-  </script>
+});
+
+renderProducts(products);
+</script>
 
 </body>
 </html>
