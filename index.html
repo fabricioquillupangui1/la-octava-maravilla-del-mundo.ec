@@ -160,7 +160,7 @@
       <form id="formPedido" onsubmit="enviarPedido(event)">
         <input type="text" id="nombre" placeholder="Nombre y Apellido" required>
         <input type="email" id="correo" placeholder="Correo Electrónico" required>
-            <input type="tel" id="telefono" name="telefono" required>
+        <input type="tel" id="telefono" placeholder="Teléfono" required>
         <textarea id="pedido" rows="4" placeholder="Describe tu pedido aquí..." required></textarea>
         <button class="btn" type="submit">Enviar Pedido</button>
       </form>
@@ -187,9 +187,6 @@
   </div>
 
   <script>
-    const sheetURL = "AQUI_IRA_EL_LINK_DE_TU_HOJA_DE_CALCULO_PEDIDOS";
-    const sheetURLCarrito = "AQUI_IRA_EL_LINK_DE_TU_HOJA_DE_CALCULO_VENTAS";
-
     const products = [
       {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:'',desc:'Producto estrella.'},
       {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:'',desc:'Producto interrogante.'},
@@ -236,7 +233,7 @@
     function addToCart(id){
       cart[id]=(cart[id]||0)+1;
       updateCartCount();
-      guardarEnHojaVentas(id);
+      console.log("Producto agregado al carrito:", id);
     }
     function updateCartCount(){
       const count=Object.values(cart).reduce((a,b)=>a+b,0);
@@ -244,21 +241,35 @@
       if(count>0){el.textContent=count;el.style.display='inline-block'}else el.style.display='none';
     }
 
+    // --- FUNCION PARA ENVIAR PEDIDO A GOOGLE SHEETS ---
     function enviarPedido(e){
       e.preventDefault();
-      const nombre=document.getElementById('nombre').value;
-      const correo=document.getElementById('correo').value;
-      const pedido=document.getElementById('pedido').value;
+      const nombre = document.getElementById('nombre').value;
+      const correo = document.getElementById('correo').value;
+      const telefono = document.getElementById('telefono').value;
+      const pedido = document.getElementById('pedido').value;
 
-      // Aquí se enviará la información a Google Sheets (agregaremos el script más adelante)
-      console.log("Pedido enviado a hoja de cálculo:", nombre, correo, pedido);
-      alert("✅ Tu pedido fue registrado correctamente en el sistema.");
-      e.target.reset();
-    }
+      const url = "https://script.google.com/macros/s/AKfycbxLo_C9Kg7LYrrgxKZ4WZTfO5s4D0OnWeSOQ-fvI3wqmdS3VK3X5rQ-8ReDnufmQ79YGg/exec"; // Cambia por tu URL de Apps Script
 
-    function guardarEnHojaVentas(id){
-      const p=products.find(x=>x.id===id);
-      console.log("Producto vendido:",p.nombre,"guardado en hoja de ventas.");
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({nombre, correo, telefono, pedido}),
+        headers: {"Content-Type": "application/json"}
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.result === "success"){
+          alert("✅ Tu pedido fue registrado correctamente en la hoja de cálculo.");
+          e.target.reset();
+        } else {
+          alert("❌ Ocurrió un error al registrar tu pedido.");
+          console.error(data.error);
+        }
+      })
+      .catch(err => {
+        alert("❌ Error de conexión con la hoja de cálculo.");
+        console.error(err);
+      });
     }
 
     const avisos=[
@@ -280,8 +291,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
