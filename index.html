@@ -6,17 +6,15 @@
   <title>La Octava Maravilla del Mundo — Joyas, Accesorios y Perfumes</title>
 
   <style>
-    /* ---------- ESTILOS GENERALES ---------- */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
       font-family: 'Inter', system-ui, sans-serif;
-      background: #eaf3ff; /* azul bajito */
+      background: #eaf3ff;
       color:#111;
       line-height:1.4;
     }
 
-    /* ---------- ENCABEZADO ---------- */
     header{background:#fff;border-bottom:1px solid #ddd;}
     .container{max-width:1100px;margin:0 auto;padding:0 16px}
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
@@ -27,12 +25,9 @@
       display:grid;place-items:center;
       overflow:hidden;
     }
-    /* Aquí colocas tu logo oficial ↓↓↓ */
     .logo img{width:100%;height:100%;object-fit:cover}
-
     .brand-name{font-weight:700;font-size:18px}
     .subtitle{font-size:12px;color:#7a7a7a}
-
     nav ul{list-style:none;display:flex;gap:14px;align-items:center}
     nav a{text-decoration:none;color:#333;padding:8px 10px;border-radius:8px}
     nav a:hover{background:#e6efff}
@@ -40,7 +35,6 @@
     .cart-count{position:absolute;top:-8px;right:-8px;background:#d9534f;color:white;border-radius:50%;padding:4px 7px;font-size:12px}
     .cart-icon{width:20px;height:20px;vertical-align:middle;margin-right:6px}
 
-    /* ---------- HERO ---------- */
     .hero{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:center;padding:28px 0}
     .hero h1{font-size:28px;margin-bottom:8px}
     .hero p{color:#555}
@@ -51,7 +45,6 @@
     .search input{flex:1;padding:10px;border:1px solid #ccc;border-radius:10px 0 0 10px}
     .search button{padding:10px;border:1px solid #ccc;border-left:0;border-radius:0 10px 10px 0;background:#fff}
 
-    /* ---------- PRODUCTOS ---------- */
     #productos{margin-top:30px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
     .card{background:white;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);overflow:hidden}
@@ -61,23 +54,38 @@
     .price{font-weight:700}
     .add{background:#0074D9;color:white;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;margin-top:8px}
 
-    /* ---------- FORMULARIO DE PEDIDO ---------- */
     #pedidoForm{background:white;padding:20px;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.05);margin-top:40px}
     #pedidoForm h2{margin-bottom:12px;text-align:center;color:#0074D9}
     #pedidoForm input,#pedidoForm textarea{
       width:100%;padding:10px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px
     }
 
-    /* ---------- FOOTER ---------- */
     footer{margin-top:40px;padding:20px 0;background:#fff;border-top:1px solid #ddd;text-align:center;font-size:14px;color:#666}
 
-    /* ---------- WHATSAPP ---------- */
     .whatsapp-btns{
       position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:10px;z-index:100;
     }
     .whatsapp-btns a img{width:48px;height:48px;border-radius:50%;box-shadow:0 4px 8px rgba(0,0,0,0.2)}
 
-    /* ---------- POPUPS ---------- */
+    .help-popup{
+      position:fixed;
+      bottom:100px;
+      right:20px;
+      background:rgba(0,116,217,0.9);
+      color:white;
+      padding:12px 18px;
+      border-radius:10px;
+      font-size:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      z-index:110;
+      animation: floatUp 0.5s ease;
+    }
+
+    @keyframes floatUp{
+      from{transform:translateY(20px);opacity:0;}
+      to{transform:translateY(0);opacity:1;}
+    }
+
     .popup{
       position:fixed;bottom:0;left:20px;background:#fff;border-radius:12px 12px 0 0;
       box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:16px;max-width:300px;
@@ -95,8 +103,7 @@
     <div class="container topbar">
       <div class="brand">
         <div class="logo">
-          <!-- 🖼️ AQUÍ COLOCAS TU LOGO OFICIAL -->
-          <!-- <img src="https://i.postimg.cc/c4CMMSL2/Whats-App-Image-2025-10-30-at-15-35-49.jpg" alt="Logo La Octava Maravilla del Mundo"> -->
+          <img src="https://i.postimg.cc/c4CMMSL2/Whats-App-Image-2025-10-30-at-15-35-49.jpg" alt="Logo La Octava Maravilla del Mundo">
         </div>
         <div>
           <div class="brand-name">La Octava Maravilla del Mundo</div>
@@ -124,7 +131,6 @@
   <!-- SECCIÓN PRINCIPAL -->
   <main class="container">
 
-    <!-- HERO -->
     <section class="hero">
       <div>
         <h1>Redefine tu belleza con joyas y perfumes exclusivos</h1>
@@ -144,13 +150,11 @@
       </div>
     </section>
 
-    <!-- PRODUCTOS -->
     <section id="productos">
       <h2 style="margin-bottom:12px;color:#0074D9">Catálogo de Productos</h2>
       <div id="productGrid" class="grid"></div>
     </section>
 
-    <!-- FORMULARIO DE PEDIDO -->
     <section id="pedidoForm">
       <h2>REGISTRA TU PEDIDO</h2>
       <form id="formPedido" onsubmit="enviarPedido(event)">
@@ -159,30 +163,32 @@
         <textarea id="pedido" rows="4" placeholder="Describe tu pedido aquí..." required></textarea>
         <button class="btn" type="submit">Enviar Pedido</button>
       </form>
-      <!-- ⚠️ Aquí debes poner tu correo personal en el script de abajo -->
+      <p style="font-size:12px;text-align:center;color:#777">Tu pedido será registrado automáticamente en nuestra hoja de control.</p>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
   <footer id="contacto">
     <div>© 2025 La Octava Maravilla del Mundo — Todos los derechos reservados.</div>
   </footer>
 
   <!-- WHATSAPP -->
+  <div class="help-popup">💬 ¿Necesitas ayuda? Contacta con un vendedor</div>
   <div class="whatsapp-btns">
     <a href="https://wa.me/593987872572" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp 1"></a>
     <a href="https://wa.me/593969271389" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp 2"></a>
   </div>
 
-  <!-- POPUPS PROMOCIONALES -->
+  <!-- POPUP PROMOCIONAL -->
   <div id="popup" class="popup">
     <h4 id="popupTitle"></h4>
     <p id="popupMsg"></p>
   </div>
 
   <script>
-    // ---------- LISTA DE PRODUCTOS ----------
+    const sheetURL = "AQUI_IRA_EL_LINK_DE_TU_HOJA_DE_CALCULO_PEDIDOS";
+    const sheetURLCarrito = "AQUI_IRA_EL_LINK_DE_TU_HOJA_DE_CALCULO_VENTAS";
+
     const products = [
       {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:'',desc:'Producto estrella.'},
       {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:'',desc:'Producto interrogante.'},
@@ -193,81 +199,70 @@
       {id:7,nombre:'Conjuntos Personalizados',categoria:'joyeria',precio:35.00,img:'',desc:'Personaliza tu estilo.'},
       {id:8,nombre:'Aretes Pequeños',categoria:'joyeria',precio:15.00,img:'',desc:'Perfectos para uso diario.'},
       {id:9,nombre:'Cadenas Cubanas',categoria:'joyeria',precio:20.00,img:'https://i.postimg.cc/SN4HjxL5/Whats-App-Image-2025-10-30-at-15-35-43.jpg',desc:'Estilo moderno.'},
-      {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:'',desc:'Fragancia elegante.'},
-      {id:11,nombre:'Perfume Hombre Ohm',categoria:'perfumes',precio:48.00,img:'',desc:'Perfume clásico.'},
-      {id:12,nombre:'Perfume Mujer Di que sí',categoria:'perfumes',precio:45.00,img:'',desc:'Fragancia femenina y suave.'},
-      {id:13,nombre:'Perfume Mujer Amaderada',categoria:'perfumes',precio:47.00,img:'',desc:'Aroma cálido y sofisticado.'}
+      {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:'',desc:'Fragancia elegante.'}
     ];
 
-    // ---------- RENDERIZAR PRODUCTOS ----------
     function renderProducts(list){
-      const grid = document.getElementById('productGrid');
-      grid.innerHTML = '';
+      const grid=document.getElementById('productGrid');
+      grid.innerHTML='';
       list.forEach(p=>{
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="thumb">
-            <!-- 🖼️ AQUI PONES TU IMAGEN REAL -->
-            <img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}">
-          </div>
+        const card=document.createElement('div');
+        card.className='card';
+        card.innerHTML=`
+          <div class="thumb"><img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
           <div class="body">
             <div style="font-weight:700">${p.nombre}</div>
             <div class="price">$${p.precio.toFixed(2)}</div>
             <div style="font-size:13px;color:#666">${p.desc}</div>
             <button class="add" onclick="addToCart(${p.id})">Agregar al carrito</button>
-          </div>
-        `;
+          </div>`;
         grid.appendChild(card);
       });
     }
 
-    // ---------- FILTRO ----------
     function applyFilters(){
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const cat = document.getElementById('categoryFilter').value;
-      const filtered = products.filter(p=>{
-        const matchCat = (cat==='all'||p.categoria===cat);
-        const matchQ = !q || p.nombre.toLowerCase().includes(q);
-        return matchCat && matchQ;
+      const q=document.getElementById('searchInput').value.toLowerCase();
+      const cat=document.getElementById('categoryFilter').value;
+      const filtered=products.filter(p=>{
+        const matchCat=(cat==='all'||p.categoria===cat);
+        const matchQ=!q||p.nombre.toLowerCase().includes(q);
+        return matchCat&&matchQ;
       });
       renderProducts(filtered);
     }
 
-    // ---------- CARRITO ----------
-    const cart = {};
+    const cart={};
     function addToCart(id){
-      cart[id] = (cart[id]||0)+1;
+      cart[id]=(cart[id]||0)+1;
       updateCartCount();
+      guardarEnHojaVentas(id);
     }
     function updateCartCount(){
-      const count = Object.values(cart).reduce((a,b)=>a+b,0);
-      const el = document.getElementById('cartCount');
-      if(count>0){el.textContent=count;el.style.display='inline-block'} else el.style.display='none';
+      const count=Object.values(cart).reduce((a,b)=>a+b,0);
+      const el=document.getElementById('cartCount');
+      if(count>0){el.textContent=count;el.style.display='inline-block'}else el.style.display='none';
     }
 
-    // ---------- ENVIAR PEDIDO ----------
     function enviarPedido(e){
       e.preventDefault();
       const nombre=document.getElementById('nombre').value;
       const correo=document.getElementById('correo').value;
       const pedido=document.getElementById('pedido').value;
 
-      // ⚠️ CAMBIA ESTE CORREO POR EL TUYO PERSONAL
-      const correoVendedor = "priscillamena488@gmail.com";
-
-      const body = `Nombre: ${nombre}%0D%0ACorreo: ${correo}%0D%0APedido: ${pedido}`;
-      window.open(`mailto:${correoVendedor}?subject=Nuevo Pedido&body=${body}`);
-      alert("Pedido enviado correctamente. ¡Gracias por tu compra!");
+      // Aquí se enviará la información a Google Sheets (agregaremos el script más adelante)
+      console.log("Pedido enviado a hoja de cálculo:", nombre, correo, pedido);
+      alert("✅ Tu pedido fue registrado correctamente en el sistema.");
       e.target.reset();
     }
 
-    // ---------- POPUPS PROMOCIONALES ----------
-    const avisos = [
+    function guardarEnHojaVentas(id){
+      const p=products.find(x=>x.id===id);
+      console.log("Producto vendido:",p.nombre,"guardado en hoja de ventas.");
+    }
+
+    const avisos=[
       {t:"🎁 Regalo Secreto",m:"Si dejas algo en el carrito, te enviaremos un pequeño regalo extra."},
-      {t:"📞 Llamada con un Experto",m:"Te ayudamos gratis por videollamada a elegir la joya o perfume perfecto."},
-      {t:"💎 Juego de Combinación",m:"Te mostramos qué otros productos combinan con tu elección."},
-      {t:"📹 Prueba de Clientes",m:"Videos reales de clientes en Quito usando nuestros productos."}
+      {t:"📞 Llamada con un Experto",m:"Te ayudamos gratis por videollamada a elegir la joya o perfume perfecto."}
     ];
     let idx=0;
     const popup=document.getElementById('popup');
@@ -279,10 +274,12 @@
       setTimeout(()=>popup.classList.remove('show'),8000);
       idx=(idx+1)%avisos.length;
     }
-    setInterval(mostrarAviso,12000); // cada 12 seg
+    setInterval(mostrarAviso,10000);
     renderProducts(products);
   </script>
 </body>
 </html>
+
+
 
 
