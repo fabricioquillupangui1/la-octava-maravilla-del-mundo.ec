@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Usuario</title>
+  <title>Registro de Pedido</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
       padding: 25px 40px;
       border-radius: 12px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-      width: 340px;
+      width: 360px;
     }
     h2 {
       text-align: center;
@@ -29,12 +29,15 @@
       margin-top: 10px;
       font-weight: bold;
     }
-    input {
+    input, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       border-radius: 6px;
       border: 1px solid #ccc;
+    }
+    textarea {
+      resize: vertical;
     }
     button {
       margin-top: 20px;
@@ -59,20 +62,20 @@
 </head>
 <body>
 
-  <form id="formRegistro">
-    <h2>Registro de Usuario</h2>
+  <form id="formPedido">
+    <h2>Registrar Pedido</h2>
 
-    <label>Nombre:</label>
-    <input type="text" name="nombre" required>
+    <label>Nombres:</label>
+    <input type="text" name="nombres" required>
 
-    <label>Apellido:</label>
-    <input type="text" name="apellido" required>
+    <label>Correo:</label>
+    <input type="email" name="correo" required>
 
     <label>Teléfono:</label>
     <input type="text" name="telefono" required>
 
-    <label>Correo:</label>
-    <input type="email" name="correo" required>
+    <label>Pedido:</label>
+    <textarea name="pedido" rows="4" required></textarea>
 
     <button type="submit">Enviar</button>
     <div class="msg" id="msg"></div>
@@ -81,7 +84,7 @@
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbxxFv2c29hZekhHfdIVgiSv43EA9WS4jIL2sdTYPYwDpQbKOMOwbxjza3PJHfcjvdvIIg/exec";
 
-    document.getElementById('formRegistro').addEventListener('submit', e => {
+    document.getElementById('formPedido').addEventListener('submit', e => {
       e.preventDefault();
 
       const form = e.target;
@@ -92,11 +95,11 @@
         body: formData
       })
       .then(response => {
-        document.getElementById('msg').innerText = "✅ Datos enviados correctamente";
+        document.getElementById('msg').innerText = "✅ Pedido enviado correctamente";
         form.reset();
       })
       .catch(error => {
-        document.getElementById('msg').innerText = "❌ Error al enviar los datos";
+        document.getElementById('msg').innerText = "❌ Error al enviar el pedido";
         console.error('Error:', error);
       });
     });
@@ -104,4 +107,3 @@
 
 </body>
 </html>
-
