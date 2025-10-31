@@ -63,7 +63,7 @@
     <button onclick="applyFilters()">Filtrar</button>
   </div>
 
-  <!-- Catálogo -->
+  <!-- Catálogo de productos -->
   <section id="productos" class="grid"></section>
 
 </div>
@@ -85,7 +85,9 @@
 </footer>
 
 <script>
-const scriptURL = "TU_URL_DE_APP_SCRIPT_AQUI"; // Cambia por tu URL de App Script
+const scriptURL = "https://script.google.com/macros/s/TU_APP_SCRIPT_ID/exec"; // 🔹 Tu URL de App Script
+let cart = {};
+
 const products = [
   {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:''},
   {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:''},
@@ -99,13 +101,12 @@ const products = [
   {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:''}
 ];
 
-const cart = {};
-
+// Renderizar productos en la página
 function renderProducts(list){
   const grid = document.getElementById('productos');
-  grid.innerHTML = '';
+  grid.innerHTML='';
   list.forEach(p=>{
-    const card = document.createElement('div');
+    const card=document.createElement('div');
     card.className='card';
     card.innerHTML=`
       <div class="thumb"><img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
@@ -116,41 +117,44 @@ function renderProducts(list){
   });
 }
 
+// Filtrar productos
 function applyFilters(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const cat = document.getElementById('categoryFilter').value;
-  const filtered = products.filter(p=>{
-    const matchCat = (cat==='all'||p.categoria===cat);
-    const matchQ = !q || p.nombre.toLowerCase().includes(q);
-    return matchCat && matchQ;
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const cat=document.getElementById('categoryFilter').value;
+  const filtered=products.filter(p=>{
+    const matchCat=(cat==='all'||p.categoria===cat);
+    const matchQ=!q||p.nombre.toLowerCase().includes(q);
+    return matchCat&&matchQ;
   });
   renderProducts(filtered);
 }
 
+// Agregar al carrito
 function addToCart(id){
-  cart[id] = (cart[id]||0)+1;
+  cart[id]=(cart[id]||0)+1;
   updateCartCount();
 }
 
+// Actualizar contador del carrito
 function updateCartCount(){
-  const count = Object.values(cart).reduce((a,b)=>a+b,0);
-  document.getElementById('cartCount').textContent = count;
+  const count=Object.values(cart).reduce((a,b)=>a+b,0);
+  document.getElementById('cartCount').textContent=count;
 }
 
 // Abrir ventana del carrito
 function abrirCarrito(){
-  const popup = document.getElementById('popupCarrito');
-  const itemsDiv = document.getElementById('carritoItems');
+  const popup=document.getElementById('popupCarrito');
+  const itemsDiv=document.getElementById('carritoItems');
   itemsDiv.innerHTML='';
   let total=0;
   for(const id in cart){
-    const product = products.find(p=>p.id==id);
-    const qty = cart[id];
-    const subtotal = product.precio * qty;
-    total += subtotal;
-    itemsDiv.innerHTML += `<div>${product.nombre} x${qty} - $${subtotal.toFixed(2)}</div>`;
+    const product=products.find(p=>p.id==id);
+    const qty=cart[id];
+    const subtotal=product.precio*qty;
+    total+=subtotal;
+    itemsDiv.innerHTML+=`<div>${product.nombre} x${qty} - $${subtotal.toFixed(2)}</div>`;
   }
-  document.getElementById('total').value = total.toFixed(2);
+  document.getElementById('total').value=total.toFixed(2);
   popup.classList.add('show');
 }
 
@@ -161,22 +165,27 @@ function cerrarCarrito(){
 
 // Enviar carrito a Google Sheets
 function enviarCarrito(){
-  const cliente = document.getElementById('cliente').value;
-  const contacto = document.getElementById('contacto').value;
-  const total = document.getElementById('total').value;
-  const descripcion = document.getElementById('carritoItems').innerText;
+  const cliente=document.getElementById('cliente').value;
+  const contacto=document.getElementById('contacto').value;
+  const total=document.getElementById('total').value;
+  const descripcion=document.getElementById('carritoItems').innerText;
 
-  const data = new URLSearchParams();
-  data.append('cliente', cliente);
-  data.append('contacto', contacto);
-  data.append('descripcion', descripcion);
-  data.append('total', total);
+  if(!cliente||!contacto||!total){
+    alert("Completa todos los campos antes de enviar.");
+    return;
+  }
 
-  fetch(scriptURL, { method:'POST', body:data })
+  const data=new URLSearchParams();
+  data.append('cliente',cliente);
+  data.append('contacto',contacto);
+  data.append('descripcion',descripcion);
+  data.append('total',total);
+
+  fetch(scriptURL,{ method:'POST', body:data })
   .then(r=>r.text())
   .then(resp=>{
     document.getElementById('msgCarrito').innerText="✅ Carrito enviado correctamente";
-    cart = {};
+    cart={};
     updateCartCount();
     cerrarCarrito();
   })
@@ -185,44 +194,7 @@ function enviarCarrito(){
     console.error(err);
   });
 }
-<!-- Ventanas flotantes -->
-<div class="popup" id="popup1">
-  <h4>🎁 Regalo Secreto</h4>
-  <p>Si dejas algo en el carrito, te enviamos un pequeño regalo extra para convencerte de volver a comprar.</p>
-</div>
 
-<div class="popup" id="popup2">
-  <h4>📞 Llamada con un Experto</h4>
-  <p>Te ayudamos gratis por videollamada a elegir la joya o perfume perfecto.</p>
-</div>
-
-<div class="popup" id="popup3">
-  <h4>🎲 Juego de Combinación</h4>
-  <p>Te mostramos exactamente qué otros productos quedan bien con lo que ya elegiste para que compres más fácil.</p>
-</div>
-<script>
-  // Función para mostrar popups secuencialmente
-  function mostrarPopups() {
-    const popups = [
-      document.getElementById('popup1'),
-      document.getElementById('popup2'),
-      document.getElementById('popup3')
-    ];
-    
-    let delay = 0;
-    popups.forEach(popup => {
-      setTimeout(() => {
-        popup.classList.add('show');
-        // Ocultar automáticamente después de 8 segundos
-        setTimeout(() => popup.classList.remove('show'), 8000);
-      }, delay);
-      delay += 5000; // 5 segundos entre cada popup
-    });
-  }
-
-  // Mostrar popups después de que la página cargue
-  window.addEventListener('load', mostrarPopups);
-</script>
 // Inicializa
 renderProducts(products);
 </script>
