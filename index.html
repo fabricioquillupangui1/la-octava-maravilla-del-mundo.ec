@@ -20,33 +20,19 @@
     .add-cart { background:#28a745; color:white; margin-top:8px; }
     .cart-count { display:inline-block; background:#d9534f; color:white; border-radius:50%; padding:4px 8px; font-size:12px; margin-left:6px; }
     #msg, #msgCarrito { text-align:center; font-weight:bold; margin-top:10px; color:green; }
-
-    /* Ventana flotante del carrito */
-    #popupCarrito {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      background:white;
-      padding:20px;
-      border-radius:12px;
-      box-shadow:0 4px 20px rgba(0,0,0,0.3);
-      width:320px;
-      z-index:100;
-      transition: transform 0.3s ease;
-    }
-    #popupCarrito.show { transform: translate(-50%, -50%) scale(1); }
-    #popupCarrito h3 { text-align:center; margin-bottom:12px; color:#0074D9; }
+    /* Popup ventana flotante */
+    #popupCarrito { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.25); display:none; z-index:1000; width:90%; max-width:400px; }
+    #popupCarrito h3 { color:#0074D9; text-align:center; margin-bottom:12px; }
+    #popupCarrito button { width:100%; margin-top:10px; }
+    #overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:900; }
   </style>
 </head>
 <body>
 
 <header>
+  <img src="https://i.postimg.cc/c4CMMSL2/Whats-App-Image-2025-10-30-at-15-35-49.jpg" alt="Logo" style="width:80px;height:80px;">
   <h1>La Octava Maravilla del Mundo</h1>
   <p>Joyas · Accesorios · Perfumes</p>
-  <button onclick="abrirCarrito()" style="position:relative;">
-    Carrito 🛒 <span id="cartCount" class="cart-count">0</span>
-  </button>
 </header>
 
 <div class="container">
@@ -63,20 +49,43 @@
     <button onclick="applyFilters()">Filtrar</button>
   </div>
 
-  <!-- Catálogo de productos -->
+  <!-- Catálogo -->
   <section id="productos" class="grid"></section>
+
+  <!-- Pedido individual -->
+  <section id="pedidoForm" style="margin-top:40px;">
+    <h2>Registrar Pedido Individual</h2>
+    <form id="formPedido">
+      <input type="text" name="nombres" placeholder="Nombres" required>
+      <input type="email" name="correo" placeholder="Correo" required>
+      <input type="tel" name="telefono" placeholder="Teléfono" required>
+      <textarea name="pedido" rows="4" placeholder="Describe tu pedido" required></textarea>
+      <button type="submit">Enviar Pedido</button>
+    </form>
+    <div id="msg"></div>
+  </section>
+
+  <!-- Carrito -->
+  <section id="carritoForm" style="margin-top:40px;">
+    <h2>Carrito de Compras</h2>
+    <p>Agrega productos al carrito usando los botones "Agregar al carrito" en el catálogo. Luego haz clic en "Pagar".</p>
+    <button onclick="abrirCarrito()">Pagar Carrito</button>
+  </section>
 
 </div>
 
-<!-- Ventana flotante del carrito -->
+<!-- Ventana flotante -->
+<div id="overlay"></div>
 <div id="popupCarrito">
   <h3>Resumen del Carrito</h3>
-  <div id="carritoItems" style="max-height:200px; overflow:auto; margin-bottom:12px;"></div>
-  <input type="text" id="cliente" placeholder="Nombres del cliente" required>
-  <input type="tel" id="contacto" placeholder="Teléfono de contacto" required>
-  <input type="text" id="total" placeholder="Total del carrito" readonly>
-  <button onclick="enviarCarrito()">Enviar Pedido</button>
-  <button onclick="cerrarCarrito()" style="background:#ccc;color:#000;margin-top:8px;">Cerrar</button>
+  <form id="formCarrito">
+    <input type="text" id="cliente" placeholder="Nombres del cliente" required>
+    <input type="tel" id="contacto" placeholder="Teléfono de contacto" required>
+    <textarea id="descripcion" rows="4" placeholder="Descripción de los productos" readonly></textarea>
+    <input type="text" id="total" placeholder="Total" readonly>
+    <button type="submit">Enviar Carrito</button>
+    <button type="button" onclick="cerrarCarrito()" style="background:#d9534f;">Cancelar</button>
+  </form>
   <div id="msgCarrito"></div>
 </div>
 
@@ -85,9 +94,9 @@
 </footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/TU_APP_SCRIPT_ID/exec"; // 🔹 Tu URL de App Script
-let cart = {};
+const scriptURL = "https://script.google.com/macros/s/AKfycbwgtql-tElo73RQ9U1kO5S9b8tIvy5UqOT9_voqWuoxo9adYJiRTq0_qq8zwgHMXzFtRA/exec";
 
+// Productos
 const products = [
   {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:''},
   {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:''},
@@ -101,14 +110,16 @@ const products = [
   {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:''}
 ];
 
-// Renderizar productos en la página
+const cart = {};
+
+// Renderizar productos
 function renderProducts(list){
   const grid = document.getElementById('productos');
-  grid.innerHTML='';
+  grid.innerHTML = '';
   list.forEach(p=>{
-    const card=document.createElement('div');
-    card.className='card';
-    card.innerHTML=`
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
       <div class="thumb"><img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
       <div style="font-weight:700">${p.nombre}</div>
       <div>$${p.precio.toFixed(2)}</div>
@@ -117,83 +128,89 @@ function renderProducts(list){
   });
 }
 
-// Filtrar productos
 function applyFilters(){
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const cat=document.getElementById('categoryFilter').value;
-  const filtered=products.filter(p=>{
-    const matchCat=(cat==='all'||p.categoria===cat);
-    const matchQ=!q||p.nombre.toLowerCase().includes(q);
-    return matchCat&&matchQ;
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cat = document.getElementById('categoryFilter').value;
+  const filtered = products.filter(p=>{
+    const matchCat = (cat==='all'||p.categoria===cat);
+    const matchQ = !q || p.nombre.toLowerCase().includes(q);
+    return matchCat && matchQ;
   });
   renderProducts(filtered);
 }
 
-// Agregar al carrito
+// Carrito
 function addToCart(id){
-  cart[id]=(cart[id]||0)+1;
-  updateCartCount();
+  cart[id] = (cart[id]||0) + 1;
+  abrirCarrito();
+  actualizarResumenCarrito();
 }
 
-// Actualizar contador del carrito
-function updateCartCount(){
-  const count=Object.values(cart).reduce((a,b)=>a+b,0);
-  document.getElementById('cartCount').textContent=count;
-}
-
-// Abrir ventana del carrito
-function abrirCarrito(){
-  const popup=document.getElementById('popupCarrito');
-  const itemsDiv=document.getElementById('carritoItems');
-  itemsDiv.innerHTML='';
-  let total=0;
+function actualizarResumenCarrito(){
+  const descripcion = [];
+  let total = 0;
   for(const id in cart){
-    const product=products.find(p=>p.id==id);
-    const qty=cart[id];
-    const subtotal=product.precio*qty;
-    total+=subtotal;
-    itemsDiv.innerHTML+=`<div>${product.nombre} x${qty} - $${subtotal.toFixed(2)}</div>`;
+    const p = products.find(prod=>prod.id==id);
+    descripcion.push(`${cart[id]} x ${p.nombre} ($${p.precio.toFixed(2)})`);
+    total += p.precio * cart[id];
   }
-  document.getElementById('total').value=total.toFixed(2);
-  popup.classList.add('show');
+  document.getElementById('descripcion').value = descripcion.join("\n");
+  document.getElementById('total').value = `$${total.toFixed(2)}`;
 }
 
-// Cerrar ventana del carrito
+function abrirCarrito(){
+  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('popupCarrito').style.display = 'block';
+}
+
 function cerrarCarrito(){
-  document.getElementById('popupCarrito').classList.remove('show');
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('popupCarrito').style.display = 'none';
 }
 
-// Enviar carrito a Google Sheets
-function enviarCarrito(){
-  const cliente=document.getElementById('cliente').value;
-  const contacto=document.getElementById('contacto').value;
-  const total=document.getElementById('total').value;
-  const descripcion=document.getElementById('carritoItems').innerText;
-
-  if(!cliente||!contacto||!total){
-    alert("Completa todos los campos antes de enviar.");
-    return;
-  }
-
-  const data=new URLSearchParams();
-  data.append('cliente',cliente);
-  data.append('contacto',contacto);
-  data.append('descripcion',descripcion);
-  data.append('total',total);
-
-  fetch(scriptURL,{ method:'POST', body:data })
+// Enviar pedido individual
+document.getElementById('formPedido').addEventListener('submit', e=>{
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  fetch(scriptURL, { method:'POST', body:formData })
   .then(r=>r.text())
   .then(resp=>{
-    document.getElementById('msgCarrito').innerText="✅ Carrito enviado correctamente";
-    cart={};
-    updateCartCount();
-    cerrarCarrito();
+    document.getElementById('msg').innerText = "✅ Pedido enviado correctamente";
+    e.target.reset();
   })
   .catch(err=>{
-    document.getElementById('msgCarrito').innerText="❌ Error al enviar carrito";
+    document.getElementById('msg').innerText = "❌ Error al enviar pedido";
     console.error(err);
   });
-}
+});
+
+// Enviar carrito
+document.getElementById('formCarrito').addEventListener('submit', e=>{
+  e.preventDefault();
+  const cliente = document.getElementById('cliente').value;
+  const contacto = document.getElementById('contacto').value;
+  const descripcion = document.getElementById('descripcion').value;
+  const total = document.getElementById('total').value;
+
+  const data = new URLSearchParams();
+  data.append('cliente', cliente);
+  data.append('contacto', contacto);
+  data.append('descripcion', descripcion);
+  data.append('total', total);
+
+  fetch(scriptURL, { method:'POST', body:data })
+  .then(r=>r.text())
+  .then(resp=>{
+    document.getElementById('msgCarrito').innerText = "✅ Carrito enviado correctamente";
+    e.target.reset();
+    cerrarCarrito();
+    for(const key in cart) delete cart[key];
+  })
+  .catch(err=>{
+    document.getElementById('msgCarrito').innerText = "❌ Error al enviar carrito";
+    console.error(err);
+  });
+});
 
 // Inicializa
 renderProducts(products);
@@ -201,3 +218,5 @@ renderProducts(products);
 
 </body>
 </html>
+
+
