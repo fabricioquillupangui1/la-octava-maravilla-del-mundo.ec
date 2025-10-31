@@ -82,7 +82,7 @@
   </form>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbxxFv2c29hZekhHfdIVgiSv43EA9WS4jIL2sdTYPYwDpQbKOMOwbxjza3PJHfcjvdvIIg/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwgtql-tElo73RQ9U1kO5S9b8tIvy5UqOT9_voqWuoxo9adYJiRTq0_qq8zwgHMXzFtRA/exec";
 
     document.getElementById('formPedido').addEventListener('submit', e => {
       e.preventDefault();
@@ -94,7 +94,8 @@
         method: 'POST',
         body: formData
       })
-      .then(response => {
+      .then(response => response.text())
+      .then(result => {
         document.getElementById('msg').innerText = "✅ Pedido enviado correctamente";
         form.reset();
       })
