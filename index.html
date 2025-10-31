@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Octava Maravilla del Mundo — Joyas, Accesorios y Perfumes</title>
-  <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family: Arial, sans-serif; background:#f3f4f6; color:#111; line-height:1.5; }
-    header, footer { background:#fff; padding:16px; text-align:center; border-bottom:1px solid #ddd; }
-    .container { max-width:1100px; margin:0 auto; padding:16px; }
-    h2 { color:#0074D9; text-align:center; margin-bottom:12px; }
-    input, textarea, select, button { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; }
-    button { background:#007bff; color:white; border:none; cursor:pointer; }
-    button:hover { background:#0056b3; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:16px; }
-    .card { background:white; border-radius:12px; padding:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
-    .thumb { width:100%; height:200px; display:flex; align-items:center; justify-content:center; background:#f9f9f9; margin-bottom:8px; }
-    .thumb img { max-width:90%; max-height:90%; object-fit:contain; }
-    .add-cart { background:#28a745; color:white; margin-top:8px; }
-    .cart-count { display:inline-block; background:#d9534f; color:white; border-radius:50%; padding:4px 8px; font-size:12px; margin-left:6px; }
-    #msg, #msgCarrito { text-align:center; font-weight:bold; margin-top:10px; color:green; }
-    /* Popup ventana flotante */
-    #popupCarrito { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.25); display:none; z-index:1000; width:90%; max-width:400px; }
-    #popupCarrito h3 { color:#0074D9; text-align:center; margin-bottom:12px; }
-    #popupCarrito button { width:100%; margin-top:10px; }
-    #overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:900; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Octava Maravilla del Mundo — Joyas, Accesorios y Perfumes</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family: Arial, sans-serif; background:#f3f4f6; color:#111; line-height:1.5; }
+header, footer { background:#fff; padding:16px; text-align:center; border-bottom:1px solid #ddd; position:relative; }
+.container { max-width:1100px; margin:0 auto; padding:16px; }
+h2 { color:#0074D9; text-align:center; margin-bottom:12px; }
+input, textarea, select, button { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; }
+button { background:#007bff; color:white; border:none; cursor:pointer; }
+button:hover { background:#0056b3; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:16px; }
+.card { background:white; border-radius:12px; padding:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.thumb { width:100%; height:200px; display:flex; align-items:center; justify-content:center; background:#f9f9f9; margin-bottom:8px; }
+.thumb img { max-width:90%; max-height:90%; object-fit:contain; }
+.add-cart { background:#28a745; color:white; margin-top:8px; }
+.cart-button { position:absolute; top:20px; right:20px; background:#28a745; border:none; color:white; border-radius:50%; width:50px; height:50px; cursor:pointer; font-weight:bold; font-size:18px; display:flex; align-items:center; justify-content:center; }
+.cart-count { position:absolute; top:-5px; right:-5px; background:#d9534f; color:white; border-radius:50%; padding:4px 8px; font-size:12px; }
+#msg, #msgCarrito { text-align:center; font-weight:bold; margin-top:10px; color:green; }
+/* Ventana flotante carrito */
+#overlay, .promo-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:900; }
+#popupCarrito, .promo-popup, #whatsappPopup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.25); display:none; z-index:1000; width:90%; max-width:400px; }
+#popupCarrito h3, .promo-popup h3, #whatsappPopup h3 { color:#0074D9; text-align:center; margin-bottom:12px; }
+#popupCarrito button, .promo-popup button, #whatsappPopup button { width:100%; margin-top:10px; }
+.close-btn { background:#d9534f; color:white; border:none; border-radius:6px; padding:5px 10px; float:right; cursor:pointer; }
+.qty-btn { background:#007bff; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer; margin:0 5px; }
+.whatsapp-btn { display:flex; align-items:center; justify-content:center; background:#25D366; color:white; border:none; border-radius:50px; padding:10px; margin:5px 0; cursor:pointer; font-weight:bold; }
+.whatsapp-btn img { width:20px; margin-right:8px; }
+</style>
 </head>
 <body>
 
@@ -33,6 +38,7 @@
   <img src="https://i.postimg.cc/c4CMMSL2/Whats-App-Image-2025-10-30-at-15-35-49.jpg" alt="Logo" style="width:80px;height:80px;">
   <h1>La Octava Maravilla del Mundo</h1>
   <p>Joyas · Accesorios · Perfumes</p>
+  <button class="cart-button" onclick="abrirCarrito()">🛒<span id="cartCount" class="cart-count">0</span></button>
 </header>
 
 <div class="container">
@@ -65,28 +71,49 @@
     <div id="msg"></div>
   </section>
 
-  <!-- Carrito -->
-  <section id="carritoForm" style="margin-top:40px;">
-    <h2>Carrito de Compras</h2>
-    <p>Agrega productos al carrito usando los botones "Agregar al carrito" en el catálogo. Luego haz clic en "Pagar".</p>
-    <button onclick="abrirCarrito()">Pagar Carrito</button>
-  </section>
-
 </div>
 
-<!-- Ventana flotante -->
+<!-- Overlay carrito -->
 <div id="overlay"></div>
 <div id="popupCarrito">
-  <h3>Resumen del Carrito</h3>
-  <form id="formCarrito">
-    <input type="text" id="cliente" placeholder="Nombres del cliente" required>
-    <input type="tel" id="contacto" placeholder="Teléfono de contacto" required>
-    <textarea id="descripcion" rows="4" placeholder="Descripción de los productos" readonly></textarea>
-    <input type="text" id="total" placeholder="Total" readonly>
-    <button type="submit">Enviar Carrito</button>
-    <button type="button" onclick="cerrarCarrito()" style="background:#d9534f;">Cancelar</button>
-  </form>
+  <button class="close-btn" onclick="cerrarCarrito()">X</button>
+  <h3>Carrito de Compras</h3>
+  <div id="cartItems" style="max-height:200px; overflow-y:auto; margin-bottom:10px;"></div>
+  <p><strong>Total:</strong> $<span id="cartTotal">0.00</span></p>
+  <input type="text" id="cliente" placeholder="Nombres del cliente" required>
+  <input type="tel" id="contacto" placeholder="Teléfono de contacto" required>
+  <button onclick="enviarCarrito()">Enviar Carrito</button>
   <div id="msgCarrito"></div>
+</div>
+
+<!-- Promociones flotantes -->
+<div class="promo-overlay" id="promoOverlay"></div>
+<div class="promo-popup" id="promo1">
+  <button class="close-btn" onclick="cerrarPromo('promo1')">X</button>
+  <h3>Regalo Secreto</h3>
+  <p>Si dejas algo en el carrito, te enviamos un pequeño regalo extra para convencerte de volver a comprar.</p>
+</div>
+<div class="promo-popup" id="promo2">
+  <button class="close-btn" onclick="cerrarPromo('promo2')">X</button>
+  <h3>Llamada con un Experto</h3>
+  <p>Te ayudamos gratis por videollamada a elegir la joya o perfume perfecto.</p>
+</div>
+<div class="promo-popup" id="promo3">
+  <button class="close-btn" onclick="cerrarPromo('promo3')">X</button>
+  <h3>Juego de Combinación</h3>
+  <p>Te mostramos exactamente qué otros productos quedan bien con lo que ya elegiste para que compres más fácil.</p>
+</div>
+
+<!-- WhatsApp flotante -->
+<div id="whatsappPopup">
+  <button class="close-btn" onclick="cerrarWhatsapp()">X</button>
+  <h3>Contacte al vendedor</h3>
+  <button class="whatsapp-btn" onclick="window.open('https://wa.me/593991234567')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> +593 99 123 4567
+  </button>
+  <button class="whatsapp-btn" onclick="window.open('https://wa.me/593987654321')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"> +593 98 765 4321
+  </button>
 </div>
 
 <footer>
@@ -95,8 +122,6 @@
 
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbwgtql-tElo73RQ9U1kO5S9b8tIvy5UqOT9_voqWuoxo9adYJiRTq0_qq8zwgHMXzFtRA/exec";
-
-// Productos
 const products = [
   {id:1,nombre:'Argollas y Aretes Medianos',categoria:'joyeria',precio:25.00,img:''},
   {id:2,nombre:'Aretes Medianos de Arza',categoria:'joyeria',precio:20.00,img:''},
@@ -110,17 +135,16 @@ const products = [
   {id:10,nombre:'Perfume Hombre Dendur',categoria:'perfumes',precio:50.00,img:''}
 ];
 
-const cart = {};
+let cart = {};
 
-// Renderizar productos
 function renderProducts(list){
   const grid = document.getElementById('productos');
   grid.innerHTML = '';
   list.forEach(p=>{
     const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="thumb"><img src="${p.img || 'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
+    card.className='card';
+    card.innerHTML=`
+      <div class="thumb"><img src="${p.img||'https://via.placeholder.com/200?text=Imagen'}" alt="${p.nombre}"></div>
       <div style="font-weight:700">${p.nombre}</div>
       <div>$${p.precio.toFixed(2)}</div>
       <button class="add-cart" onclick="addToCart(${p.id})">Agregar al carrito</button>`;
@@ -129,11 +153,11 @@ function renderProducts(list){
 }
 
 function applyFilters(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const cat = document.getElementById('categoryFilter').value;
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const cat=document.getElementById('categoryFilter').value;
   const filtered = products.filter(p=>{
     const matchCat = (cat==='all'||p.categoria===cat);
-    const matchQ = !q || p.nombre.toLowerCase().includes(q);
+    const matchQ = !q||p.nombre.toLowerCase().includes(q);
     return matchCat && matchQ;
   });
   renderProducts(filtered);
@@ -141,56 +165,62 @@ function applyFilters(){
 
 // Carrito
 function addToCart(id){
-  cart[id] = (cart[id]||0) + 1;
+  cart[id] = (cart[id]||0)+1;
+  actualizarCartUI();
   abrirCarrito();
-  actualizarResumenCarrito();
 }
 
-function actualizarResumenCarrito(){
-  const descripcion = [];
-  let total = 0;
+function actualizarCartUI(){
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartCount = document.getElementById('cartCount');
+  cartItems.innerHTML='';
+  let total=0, count=0;
   for(const id in cart){
     const p = products.find(prod=>prod.id==id);
-    descripcion.push(`${cart[id]} x ${p.nombre} ($${p.precio.toFixed(2)})`);
-    total += p.precio * cart[id];
+    const qty = cart[id];
+    total+=p.precio*qty;
+    count+=qty;
+    const item = document.createElement('div');
+    item.innerHTML=`${p.nombre} $${p.precio.toFixed(2)} x ${qty} 
+      <button class="qty-btn" onclick="decrement(${id})">-</button>
+      <button class="qty-btn" onclick="increment(${id})">+</button>`;
+    cartItems.appendChild(item);
   }
-  document.getElementById('descripcion').value = descripcion.join("\n");
-  document.getElementById('total').value = `$${total.toFixed(2)}`;
+  cartTotal.innerText=total.toFixed(2);
+  cartCount.innerText=count;
 }
 
-function abrirCarrito(){
-  document.getElementById('overlay').style.display = 'block';
-  document.getElementById('popupCarrito').style.display = 'block';
-}
+function increment(id){ cart[id]++; actualizarCartUI(); }
+function decrement(id){ cart[id]--; if(cart[id]<=0) delete cart[id]; actualizarCartUI(); }
 
-function cerrarCarrito(){
-  document.getElementById('overlay').style.display = 'none';
-  document.getElementById('popupCarrito').style.display = 'none';
-}
+function abrirCarrito(){ document.getElementById('overlay').style.display='block'; document.getElementById('popupCarrito').style.display='block'; }
+function cerrarCarrito(){ document.getElementById('overlay').style.display='none'; document.getElementById('popupCarrito').style.display='none'; }
 
-// Enviar pedido individual
+// Pedidos individuales
 document.getElementById('formPedido').addEventListener('submit', e=>{
   e.preventDefault();
   const formData = new FormData(e.target);
-  fetch(scriptURL, { method:'POST', body:formData })
+  fetch(scriptURL,{method:'POST', body:formData})
   .then(r=>r.text())
   .then(resp=>{
-    document.getElementById('msg').innerText = "✅ Pedido enviado correctamente";
+    document.getElementById('msg').innerText="✅ Pedido enviado correctamente";
     e.target.reset();
-  })
-  .catch(err=>{
-    document.getElementById('msg').innerText = "❌ Error al enviar pedido";
+  }).catch(err=>{
+    document.getElementById('msg').innerText="❌ Error al enviar pedido";
     console.error(err);
   });
 });
 
 // Enviar carrito
-document.getElementById('formCarrito').addEventListener('submit', e=>{
-  e.preventDefault();
+function enviarCarrito(){
   const cliente = document.getElementById('cliente').value;
   const contacto = document.getElementById('contacto').value;
-  const descripcion = document.getElementById('descripcion').value;
-  const total = document.getElementById('total').value;
+  const descripcion = Object.keys(cart).map(id=>{
+    const p = products.find(pr=>pr.id==id);
+    return `${cart[id]} x ${p.nombre}`;
+  }).join('\n');
+  const total = document.getElementById('cartTotal').innerText;
 
   const data = new URLSearchParams();
   data.append('cliente', cliente);
@@ -198,25 +228,33 @@ document.getElementById('formCarrito').addEventListener('submit', e=>{
   data.append('descripcion', descripcion);
   data.append('total', total);
 
-  fetch(scriptURL, { method:'POST', body:data })
+  fetch(scriptURL,{method:'POST',body:data})
   .then(r=>r.text())
   .then(resp=>{
-    document.getElementById('msgCarrito').innerText = "✅ Carrito enviado correctamente";
-    e.target.reset();
-    cerrarCarrito();
-    for(const key in cart) delete cart[key];
-  })
-  .catch(err=>{
-    document.getElementById('msgCarrito').innerText = "❌ Error al enviar carrito";
+    document.getElementById('msgCarrito').innerText="✅ Carrito enviado correctamente";
+    cart={}; actualizarCartUI(); cerrarCarrito();
+  }).catch(err=>{
+    document.getElementById('msgCarrito').innerText="❌ Error al enviar carrito";
     console.error(err);
   });
-});
+}
+
+// Promociones
+function abrirPromo(id){ document.getElementById('promoOverlay').style.display='block'; document.getElementById(id).style.display='block'; }
+function cerrarPromo(id){ document.getElementById('promoOverlay').style.display='none'; document.getElementById(id).style.display='none'; }
+
+// WhatsApp
+function abrirWhatsapp(){ document.getElementById('overlay').style.display='block'; document.getElementById('whatsappPopup').style.display='block'; }
+function cerrarWhatsapp(){ document.getElementById('overlay').style.display='none'; document.getElementById('whatsappPopup').style.display='none'; }
 
 // Inicializa
 renderProducts(products);
+
+// Mostrar promociones al cargar
+setTimeout(()=>abrirPromo('promo1'),1000);
+setTimeout(()=>abrirPromo('promo2'),4000);
+setTimeout(()=>abrirPromo('promo3'),7000);
 </script>
 
 </body>
 </html>
-
-
